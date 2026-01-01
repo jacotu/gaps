@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "Gaps",
+  "version": "1.0.0",
+  "description": "Part-of-speech tagging on web pages with floating control panel",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "dist/wink-nlp-bundle.js",
+        "dist/content.js"
+      ],
+      "css": ["styles.css"],
+      "run_at": "document_idle",
+      "all_frames": false,
+      "match_about_blank": false
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["Schflooze-Regular.otf", "embeddings.json", "dist/embeddings.json"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
+
