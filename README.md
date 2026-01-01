@@ -1,5 +1,7 @@
 # Gaps
 
+![Gaps Extension](screenshots/gaps.png)
+
 A sophisticated Chrome extension for advanced text analysis that provides real-time part-of-speech tagging, readability metrics, and semantic gap analysis directly on web pages.
 
 ## Features
