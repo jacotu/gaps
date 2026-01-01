@@ -347,10 +347,23 @@ document.documentElement.classList.add('pos-tagger-loaded');
         `);
         
         panel.innerHTML = `
-            <div class="panel-header-pos-tagger">
+            <div class="panel-header-pos-tagger" style="position: relative;">
                 <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
                     <h3 class="panel-title-pos-tagger">Gaps</h3>
                     <div style="font-size: 10px; color: #94a3b8; text-align: center; margin-top: 4px; font-weight: 400;">built by jacotu</div>
+                </div>
+                <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px; z-index: 10;">
+                    <button id="minimizePanelBtn" style="background: transparent; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; color: #64748b; transition: all 0.2s; border-radius: 4px;" title="Minimize panel">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <button id="closePanelBtn" style="background: transparent; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; color: #64748b; transition: all 0.2s; border-radius: 4px;" title="Close panel">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div class="panel-content-pos-tagger">
@@ -456,6 +469,8 @@ document.documentElement.classList.add('pos-tagger-loaded');
     function setupEventListeners() {
         const tagBtn = document.getElementById('tagBtnPosTagger');
         const clearBtn = document.getElementById('clearBtnPosTagger');
+        const closeBtn = document.getElementById('closePanelBtn');
+        const minimizeBtn = document.getElementById('minimizePanelBtn');
         
         if (tagBtn) {
             tagBtn.addEventListener('click', analyzePage);
@@ -464,6 +479,69 @@ document.documentElement.classList.add('pos-tagger-loaded');
         
         if (clearBtn) {
             clearBtn.addEventListener('click', clearAnalysis);
+        }
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closePanel);
+            closeBtn.addEventListener('mouseenter', () => {
+                closeBtn.style.color = '#1e293b';
+                closeBtn.style.backgroundColor = '#f1f5f9';
+            });
+            closeBtn.addEventListener('mouseleave', () => {
+                closeBtn.style.color = '#64748b';
+                closeBtn.style.backgroundColor = 'transparent';
+            });
+        }
+        
+        if (minimizeBtn) {
+            minimizeBtn.addEventListener('click', toggleMinimize);
+            minimizeBtn.addEventListener('mouseenter', () => {
+                minimizeBtn.style.color = '#1e293b';
+                minimizeBtn.style.backgroundColor = '#f1f5f9';
+            });
+            minimizeBtn.addEventListener('mouseleave', () => {
+                minimizeBtn.style.color = '#64748b';
+                minimizeBtn.style.backgroundColor = 'transparent';
+            });
+        }
+    }
+    
+    function closePanel() {
+        const panel = appState.controlPanel;
+        if (panel) {
+            panel.style.display = 'none';
+        }
+    }
+    
+    function toggleMinimize() {
+        const panel = appState.controlPanel;
+        if (!panel) return;
+        
+        const content = panel.querySelector('.panel-content-pos-tagger');
+        const minimizeBtn = document.getElementById('minimizePanelBtn');
+        
+        if (!content || !minimizeBtn) return;
+        
+        const isMinimized = content.style.display === 'none';
+        
+        if (isMinimized) {
+            // Expand
+            content.style.display = 'block';
+            minimizeBtn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            `;
+            minimizeBtn.title = 'Minimize panel';
+        } else {
+            // Minimize
+            content.style.display = 'none';
+            minimizeBtn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            `;
+            minimizeBtn.title = 'Expand panel';
         }
     }
 
